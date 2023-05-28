@@ -4,8 +4,17 @@ export interface ITask {
   title: string;
   isDone: boolean;
 }
-// all tasks
+// Todo list component
 export interface ITodoAll {
   title: string;
   tasks: ITask[];
+  removeTask: (id: number) => void;
+  changeFilter: (value: keyof IFilter) => void;
+}
+
+// Filter
+export interface IFilter {
+  all: string;
+  active: string;
+  completed: string;
 }
