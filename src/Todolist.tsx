@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { ITodoAll } from './models/types';
 
-export const Todolist: FC<ITodoAll> = ({ title, tasks }) => {
+export const Todolist: FC<ITodoAll> = ({ title, tasks, removeTask, changeFilter }) => {
   return (
     <div>
       <h3>{title}</h3>
@@ -9,22 +9,21 @@ export const Todolist: FC<ITodoAll> = ({ title, tasks }) => {
         <input />
         <button>+</button>
       </div>
-      <ul>
-        <li>
-          <input type='checkbox' checked={tasks[0].isDone} /> <span>{tasks[0].title}</span>
-        </li>
-        <li>
-          <input type='checkbox' checked={tasks[1].isDone} /> <span>{tasks[1].title}</span>
-        </li>
-        <li>
-          <input type='checkbox' checked={tasks[2].isDone} /> <span>{tasks[2].title}</span>
-        </li>
-      </ul>
+
       <div>
-        <button>All</button>
-        <button>Active</button>
-        <button>Completed</button>
+        <button onClick={() => changeFilter('all')}>All</button>
+        <button onClick={() => changeFilter('active')}>Active</button>
+        <button onClick={() => changeFilter('completed')}>Completed</button>
       </div>
+
+      <ul>
+        {tasks.map(task => (
+          <li key={task.id}>
+            <button onClick={() => removeTask(task.id)}>X</button>
+            <input type='checkbox' checked={task.isDone} /> <span>{task.title}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
