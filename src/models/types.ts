@@ -1,6 +1,6 @@
 // single task
 export interface ITask {
-  id: number;
+  id: string;
   title: string;
   isDone: boolean;
 }
@@ -8,8 +8,9 @@ export interface ITask {
 export interface ITodoAll {
   title: string;
   tasks: ITask[];
-  removeTask: (id: number) => void;
+  removeTask: (id: string) => void;
   changeFilter: (value: keyof IFilter) => void;
+  addTask: (title: string) => void;
 }
 
 // Filter
