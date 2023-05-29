@@ -8,9 +8,11 @@ export interface ITask {
 export interface ITodoAll {
   title: string;
   tasks: ITask[];
-  removeTask: (id: string) => void;
+  removeTask: (taskId: string) => void;
   changeFilter: (value: keyof IFilter) => void;
   addTask: (title: string) => void;
+  changeStatus: (taskId: string, isDone: boolean) => void;
+  filterVal: keyof IFilter;
 }
 
 // Filter
