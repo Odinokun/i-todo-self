@@ -4,7 +4,6 @@ import { v1 } from 'uuid';
 import { Todolist } from './Todolist';
 
 import { IFilter } from './models/types';
-import './App.css';
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -12,25 +11,32 @@ function App() {
     { id: v1(), title: 'JS', isDone: true },
     { id: v1(), title: 'ReactJS', isDone: false },
   ]);
-  const [filter, setFilter] = useState<keyof IFilter>('all');
+  const [filterVal, setFilterVal] = useState<keyof IFilter>('all');
 
   const removeTask = (id: string) => {
     setTasks(tasks.filter(task => task.id !== id));
   };
 
   let tasks4Todo = tasks;
-  if (filter === 'active') {
+  if (filterVal === 'active') {
     tasks4Todo = tasks.filter(task => !task.isDone);
-  } else if (filter === 'completed') {
+  } else if (filterVal === 'completed') {
     tasks4Todo = tasks.filter(task => task.isDone);
   }
   const changeFilter = (value: keyof IFilter) => {
-    setFilter(value);
+    setFilterVal(value);
+    console.log(value);
   };
 
   const addTask = (title: string) => {
-    const newTask = { id: v1(), title, isDone: false };
-    setTasks([newTask, ...tasks]);
+    if (title.trim() !== '') {
+      const newTask = { id: v1(), title: title.trim(), isDone: false };
+      setTasks([newTask, ...tasks]);
+    }
+  };
+
+  const changeStatus = (id: string, isDone: boolean) => {
+    setTasks(tasks.map(task => (task.id === id ? { ...task, isDone } : task)));
   };
 
   return (
@@ -41,6 +47,8 @@ function App() {
         removeTask={removeTask}
         changeFilter={changeFilter}
         addTask={addTask}
+        changeStatus={changeStatus}
+        filterVal={filterVal}
       />
     </div>
   );
