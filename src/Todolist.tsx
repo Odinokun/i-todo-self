@@ -2,12 +2,14 @@ import React, { KeyboardEvent, ChangeEvent, FC, useState } from 'react';
 import { ITodoAll } from './models/types';
 
 export const Todolist: FC<ITodoAll> = ({
+  todoId,
   title,
   tasks,
   removeTask,
   changeFilter,
   addTask,
   changeStatus,
+  removeTodo,
   filterVal,
 }) => {
   const [inputValue, setInputValue] = useState('');
@@ -29,17 +31,24 @@ export const Todolist: FC<ITodoAll> = ({
       setError('Title is required');
       return;
     }
-    addTask(inputValue);
+    addTask(todoId, inputValue);
     setInputValue('');
   };
 
-  const onAllClickHandler = () => changeFilter('all');
-  const onActiveClickHandler = () => changeFilter('active');
-  const onCompletedClickHandler = () => changeFilter('completed');
+  const onAllClickHandler = () => changeFilter(todoId, 'all');
+  const onActiveClickHandler = () => changeFilter(todoId, 'active');
+  const onCompletedClickHandler = () => changeFilter(todoId, 'completed');
+
+  const onRemoveTodoHandler = () => removeTodo(todoId);
 
   return (
     <div>
-      <h3>{title}</h3>
+      <div>
+        <h3>{title}</h3>
+        <button onClick={onRemoveTodoHandler}>remove todo</button>
+      </div>
+      <br />
+
       <div>
         <input
           className={error ? 'error' : ''}
@@ -74,11 +83,13 @@ export const Todolist: FC<ITodoAll> = ({
 
       <ul>
         {tasks.map(task => {
-          const onRemoveHandler = () => removeTask(task.id);
+          const onRemoveHandler = () => removeTask(todoId, task.id);
+
           const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
             const newIsDoneValue = e.currentTarget.checked;
-            changeStatus(task.id, newIsDoneValue);
+            changeStatus(todoId, task.id, newIsDoneValue);
           };
+
           return (
             <li key={task.id} className={task.isDone ? 'is-done' : ''}>
               <button onClick={onRemoveHandler}>X</button>
