@@ -1,21 +1,38 @@
+// Filter
+export interface IFilter {
+  all: string;
+  active: string;
+  completed: string;
+}
+
+// single todo
+export interface ITodo {
+  id: string;
+  title: string;
+  filterVal: keyof IFilter;
+}
+
 // single task
 export interface ITask {
   id: string;
   title: string;
   isDone: boolean;
 }
-// Todo list component
-export interface ITodoAll {
-  title: string;
-  tasks: ITask[];
-  removeTask: (id: string) => void;
-  changeFilter: (value: keyof IFilter) => void;
-  addTask: (title: string) => void;
+
+// tasks object
+export interface ITasks {
+  [key: string]: ITask[];
 }
 
-// Filter
-export interface IFilter {
-  all: string;
-  active: string;
-  completed: string;
+// Todolist main component
+export interface ITodoAll {
+  todoId: string;
+  title: string;
+  tasks: ITask[];
+  removeTask: (todoId: string, taskId: string) => void;
+  changeFilter: (todoId: string, value: keyof IFilter) => void;
+  addTask: (todoId: string, title: string) => void;
+  changeStatus: (todoId: string, taskId: string, isDone: boolean) => void;
+  removeTodo: (todoId: string) => void;
+  filterVal: keyof IFilter;
 }

@@ -1,0 +1,15 @@
+.App {
+  display: flex;
+}
+.error {
+  border: 1px solid tomato;
+}
+.error-message {
+  color: tomato;
+}
+.activeFilter {
+  background: lightblue;
+}
+.is-done {
+  opacity: 0.5;
+}
