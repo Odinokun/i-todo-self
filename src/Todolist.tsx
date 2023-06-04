@@ -1,5 +1,7 @@
-import React, { KeyboardEvent, ChangeEvent, FC, useState } from 'react';
+import React, { ChangeEvent, FC } from 'react';
 import { ITodoAll } from './models/types';
+import { AddItemForm } from './components/AddItemFrom';
+import { EditableSpan } from './components/EditableSpan';
 
 export const Todolist: FC<ITodoAll> = ({
   todoId,
@@ -10,55 +12,30 @@ export const Todolist: FC<ITodoAll> = ({
   addTask,
   changeStatus,
   removeTodo,
+  changeTodoTitle,
+  changeTaskTitle,
   filterVal,
 }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [error, setError] = useState<string | null>(null);
-
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.currentTarget.value);
-  };
-
-  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    setError(null);
-    if (e.key === 'Enter') {
-      onClickHandler();
-    }
-  };
-
-  const onClickHandler = () => {
-    if (inputValue.trim() === '') {
-      setError('Title is required');
-      return;
-    }
-    addTask(todoId, inputValue);
-    setInputValue('');
-  };
-
   const onAllClickHandler = () => changeFilter(todoId, 'all');
   const onActiveClickHandler = () => changeFilter(todoId, 'active');
   const onCompletedClickHandler = () => changeFilter(todoId, 'completed');
 
   const onRemoveTodoHandler = () => removeTodo(todoId);
+  const addItem = (title: string) => addTask(todoId, title);
+
+  const onTodoTitleChangeHandler = (title: string) => {
+    changeTodoTitle(todoId, title);
+  };
 
   return (
     <div>
       <div>
-        <h3>{title}</h3>
+        <EditableSpan title={title} onChange={onTodoTitleChangeHandler} />
+        <br />
         <button onClick={onRemoveTodoHandler}>remove todo</button>
       </div>
       <br />
-
-      <div>
-        <input
-          className={error ? 'error' : ''}
-          onChange={onChangeHandler}
-          onKeyDown={onKeyPressHandler}
-          value={inputValue}
-        />
-        <button onClick={onClickHandler}>+</button>
-        {error && <div className='error-message'>{error}</div>}
-      </div>
+      <AddItemForm addItem={addItem} />
 
       <div>
         <button
@@ -90,6 +67,10 @@ export const Todolist: FC<ITodoAll> = ({
             changeStatus(todoId, task.id, newIsDoneValue);
           };
 
+          const onTaskTitleChangeHandler = (title: string) => {
+            changeTaskTitle(todoId, task.id, title);
+          };
+
           return (
             <li key={task.id} className={task.isDone ? 'is-done' : ''}>
               <button onClick={onRemoveHandler}>X</button>
@@ -98,7 +79,10 @@ export const Todolist: FC<ITodoAll> = ({
                 checked={task.isDone}
                 onChange={onChangeHandler}
               />{' '}
-              <span>{task.title}</span>
+              <EditableSpan
+                title={task.title}
+                onChange={onTaskTitleChangeHandler}
+              />
             </li>
           );
         })}
