@@ -4,6 +4,7 @@ import { v1 } from 'uuid';
 import { Todolist } from './Todolist';
 
 import { IFilter, ITasks, ITodo } from './models/types';
+import { AddItemForm } from './components/AddItemFrom';
 
 function App() {
   let todolistID1 = v1();
@@ -60,8 +61,40 @@ function App() {
     delete tasks[todoId];
   };
 
+  const addTodo = (title: string) => {
+    if (title.trim() !== '') {
+      const newTodo: ITodo = {
+        id: v1(),
+        title: title.trim(),
+        filterVal: 'all',
+      };
+      setTodolists([newTodo, ...todolists]);
+      setTasks({ ...tasks, [newTodo.id]: [] });
+    }
+  };
+
+  const changeTodoTitle = (todoId: string, title: string) => {
+    setTodolists(
+      todolists.map(tl => (tl.id === todoId ? { ...tl, title } : tl))
+    );
+  };
+
+  const changeTaskTitle = (todoId: string, taskId: string, title: string) => {
+    setTasks({
+      ...tasks,
+      [todoId]: tasks[todoId].map(task =>
+        task.id === taskId ? { ...task, title } : task
+      ),
+    });
+  };
+
   return (
     <div className='App'>
+      <div>
+        <h3>Add new Todolist</h3>
+        <AddItemForm addItem={addTodo} />
+      </div>
+
       {todolists.map(tl => {
         let tasks4Todo = tasks[tl.id];
         if (tl.filterVal === 'active') {
@@ -81,6 +114,8 @@ function App() {
             addTask={addTask}
             changeStatus={changeStatus}
             removeTodo={removeTodo}
+            changeTodoTitle={changeTodoTitle}
+            changeTaskTitle={changeTaskTitle}
             filterVal={tl.filterVal}
           />
         );
