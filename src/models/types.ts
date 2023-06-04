@@ -34,5 +34,18 @@ export interface ITodoAll {
   addTask: (todoId: string, title: string) => void;
   changeStatus: (todoId: string, taskId: string, isDone: boolean) => void;
   removeTodo: (todoId: string) => void;
+  changeTodoTitle: (todoId: string, title: string) => void;
+  changeTaskTitle: (todoId: string, taskId: string, title: string) => void;
   filterVal: keyof IFilter;
+}
+
+// Add item component
+export interface IAddItemForm {
+  addItem: (title: string) => void;
+}
+
+// Edditable span component
+export interface IEditableSpan {
+  title: string;
+  onChange: (title: string) => void;
 }
